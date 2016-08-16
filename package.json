@@ -1,0 +1,50 @@
+{
+  "name": "listificando",
+  "description": "Oferece um arcabouço para realizar listagens de registros de um Banco de Dados.",
+  "keywords": "listagem filtração pesquisa paginação",
+  "version": "0.0.1",
+  "author": "Léo Felippe <leofelippedias@hotmail.com.br>",
+  "main": "./iniciar.js",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "node-uuid": "1.4.2",
+    "restificando": "umdez/restificando",
+    "configurado": "umdez/configurado",
+    "expressando": "umdez/expressando",
+    "preenchedor": "umdez/preenchedor",
+    "sequelize": "^3.5.1",
+    "mysql": "2.9.0",
+    "express": "^4.13.3",
+    "bluebird": "3.0.0",
+    "bunyan": "1.3.5",
+    "bunyan-logstash-tcp": "0.3.4",
+    "lodash": "^4.0.0"
+  },
+  "devDependencies": {
+    
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "path": "git@github.com:umdez/listificando.git"
+    }
+  ],
+  "homepage": "https://github.com/umdez/listificando#readme",
+  "bugs": "https://github.com/umdez/listificando/issues",
+  "maintainers": [
+    {
+      "name": "umdez",
+      "email": "leofelippedias@hotmail.com.br",
+      "url": "https://github.com/umdez"
+    }
+  ],
+  "contributors": [
+    "https://github.com/orgs/devowly/people"
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "bin": "./iniciar.js"
+}
