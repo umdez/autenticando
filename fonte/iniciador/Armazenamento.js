@@ -13,9 +13,7 @@
 /* Realiza o inicio e carregamento dos nossos modelos de banco de dados.     
  */
 
-var baseDaFonte = require('../indice');
-var Armazenamento = baseDaFonte.Armazenamento;
-var registrador = require('../nucleo/registrador')('Armazenamento'); 
+var Base = require('../indice');
 
 /* @Classe CarregaArmazenamento().
  ----------------------------------------*/
@@ -38,7 +36,7 @@ CarregaArmazenamento.prototype.carregar = function (configuracao) {
   var asOpcoesDeSincronizacao = { "force": minhaConfiguracao.seForForcarCriacaoDeNovasTabelas };
 
   /* @Propriedade {Objeto} [armazenamento] O módulo de armazenamento. */
-  var armazenamento = new Armazenamento(minhaConfiguracao);
+  var armazenamento = new Base.Armazenamento(minhaConfiguracao);
 
   // Inicia sequelize e retorna promessa
   return armazenamento.iniciar(asOpcoesDeSincronizacao);

@@ -13,8 +13,7 @@
 /* Realiza o inicio e carregamento dos serviços REST.  
  */
 
-var baseDaFonte = require('../indice');
-var ServicoRest = baseDaFonte.ServicoRest;
+var Base = require('../indice');
 
 /* @Classe CarregaServicoRest().
  ----------------------------------*/
@@ -34,7 +33,7 @@ CarregaServicoRest.prototype.carregar = function (aplicativo, armazenamento, con
   var minhaConfiguracao = configuracao.servidorRest;
 
   /* @Propriedade {Objeto} [srvcRest] O módulo do serviço REST. */
-  var servicoRest = new ServicoRest(aplicativo, armazenamento, minhaConfiguracao);
+  var servicoRest = new Base.ServicoRest(aplicativo, armazenamento, minhaConfiguracao);
 
   // Inicia o serviço REST e retorna promessa.
   return servicoRest.iniciar();

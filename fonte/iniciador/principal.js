@@ -13,6 +13,7 @@
 var registrador = require('../nucleo/registrador')('principal'); // O nosso registrador
 var Armazenamento = require('./Armazenamento');                  // Modulo de armazenamento.
 var ServicoRest = require('./ServicoRest');                      // O nosso serviço REST para cada um dos modelos de armazenamento.
+var Autenticacao = require('./Autenticacao');                     
 
 /* @Função prosseguir().
  *
@@ -23,24 +24,29 @@ var ServicoRest = require('./ServicoRest');                      // O nosso serv
  * @Parametro {Função} [pronto] Será chamada ao realizarmos todas as nossas funções.
  ---------------------------------------------------------------------------------------*/
 exports.prosseguir = function(configuracao, aplicativo, pronto) {
-  var esteObjeto = {};
+  var modulos = {};
+  var armazenamento = new Armazenamento(configuracao);
+  var servicoRest = new ServicoRest();
+  var autenticacao = new Autenticacao();
+  var aplic = aplicativo;
+  var conf = configuracao;
+
+  registrador.debug('Carregando os módulos base do nosso servidor.');
   
-  esteObjeto.armazenamento = new Armazenamento(configuracao);
-  esteObjeto.servicoRest = new ServicoRest();
-  
-  registrador.debug('Carregando os módulos da base do nosso servidor.');
-  
-  esteObjeto.armazenamento.carregar(configuracao)
-  .then(function (arm) {
-    // Foi carregado os módulos de armazenamento
-    esteObjeto.arm = arm;  
+  armazenamento.carregar(configuracao)
+  .then(function (objArm) {
+    modulos.armazenamento = objArm;
   })
   .then(function () {
-    // Para cada modelo de tabela nós carregamos as rotas RESTFUL.
-    return esteObjeto.servicoRest.carregar(aplicativo, esteObjeto.arm, configuracao);
+    return servicoRest.carregar(aplic, modulos.armazenamento, conf);
+  })
+  .then(function (objRest) {
+    modulos.servicoRest = objRest;
   })
   .then(function () {
-    // parece que tudo ocorreu bem
+    return autenticacao.carregar(modulos.servicoRest);
+  })
+  .then(function () {
     pronto();
   })
   .catch(function (err) {

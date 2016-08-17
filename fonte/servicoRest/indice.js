@@ -142,15 +142,24 @@ ServicoRest.prototype.carregarNossoServicoRest = function () {
         }
       });
       
+      // Em caso de já existir duas fontes para um mesmo modelo. Então
+      // utilizamos um nome fantasia ou aliase. Desse jeito fica mais simples.
+      var nomeUtilizado = fonte.aliase || fonte.nome;
+
       // Carregamos as fontes deste determinado modelo.
-      esteObjeto[fonte.nome] = restificando.fonte(fonte);
+      esteObjeto[nomeUtilizado] = restificando.fonte(fonte);
       
       // Acrescentamos aqui à nossa fonte os seus controladores.
       if (fonte.controladores){
         var osControladoresUsados = fonte.controladores();
-        esteObjeto[fonte.nome].usar(osControladoresUsados);
+        esteObjeto[nomeUtilizado].usar(osControladoresUsados);
       }
       
+      // Acrescentamos aqui os controladores funcionais a esta fonte.
+      if (fonte.controladoresFuncionais) {
+        fonte.controladoresFuncionais(esteObjeto[nomeUtilizado]);
+      }
+
     } else {
       registrador.debug('Não encontramos o modelo (' + fonte.nome + ') do banco de dados.');
     }
