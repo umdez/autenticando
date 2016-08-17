@@ -8,6 +8,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "node-uuid": "1.4.2",
+    "jsonwebtoken": "5.4.1",
     "restificando": "umdez/restificando",
     "configurado": "umdez/configurado",
     "expressando": "umdez/expressando",
