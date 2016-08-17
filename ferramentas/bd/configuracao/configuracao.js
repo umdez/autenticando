@@ -31,7 +31,7 @@ configuracao.armazenamento = {
   "usuario": "leo"                  
 , "senha": "montes"                 
 , "database": "database"  
-, "seForForcarCriacaoDeNovasTabelas": true                
+, "seForForcarCriacaoDeNovasTabelas": false                
 };
 
 module.exports = configuracao;
