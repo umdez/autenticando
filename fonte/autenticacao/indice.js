@@ -14,7 +14,7 @@ var utilitario = require('util');
 var EmissorDeEvento = require('events').EventEmitter;
 var Promessa = require('bluebird');
 var registrador = require('../nucleo/registrador')('autenticacao');
-var controladores = require('./controladores');
+var controladores = require('./controladores/indice');
 
 var Autenticacao = function (fonte) {
   this.fonte = fonte;
@@ -30,7 +30,18 @@ Autenticacao.prototype.iniciar = function () {
   registrador.debug('Iniciando autenticacao.');
 
   return new Promessa(function (deliberar, recusar) {
-    controladores(esteObjeto.fonte);
+    var ControladorDeAutenticacao = new controladores['Autenticacao']({
+      'fonte': esteObjeto.fonte
+    });
+
+    var ControladorDeSessao = new controladores['Sessao']({
+      'fonte': esteObjeto.fonte
+    });
+
+    var ControladorDeSaida = new controladores['Saida']({
+      'fonte': esteObjeto.fonte
+    });
+    
     deliberar(esteObjeto);
   });
 };

@@ -35,11 +35,9 @@ Contas.ordenamento = {
 };
 
 Contas.acoes = [ // As ações permitidas nesta fonte.
-  'ler'           // Oferece a capacidade de ler um determinado registro desta fonte.
-, 'deletar'       // Oferece a capacidade de deletar um determinado registro desta fonte. 
-, 'criar'         // Oferece a capacidade de criar um registro nesta fonte.
-, 'atualizar'     // Oferece a capacidade de atualizar um determinado registro desta fonte.
-, 'listar'        // Oferece a capacidade de listar os registros desta fonte.
+  'deletar'      // DELETE: Realiza a saida do usuário em sua conta.
+, 'criar'        // POST: Realiza a entrada do usuário em sua conta.
+, 'atualizar'    // PUT: Realiza a manutenção da sessão do usuário em sua conta.
 ];                                           
 
 Contas.excluirAtributos = [ // Os atributos que serão excluidos.
