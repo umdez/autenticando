@@ -6,7 +6,7 @@ var jsonWebToken = function(argumentos) {
 };
 
 jsonWebToken.prototype.inicializar = function(opcoes) {
-  this.modelo = opcoes.modelo;
+  this.modelos = opcoes.modelos;
   this.token = null;
   this.jid = null;
   this.senha = null;
@@ -56,11 +56,17 @@ jsonWebToken.prototype.autenticar = function(requisicao, resposta, contexto, cd)
 
     if (meuObj.jid && meuObj.senha) {
       
-     return meuObj.modelo.findOne({
+     return meuObj.modelos['Usuarios'].findOne({
+        attributes: ['id', 'nome', 'jid'], 
         where: {
           jid: meuObj.jid
-        }
+        }, 
+        include: [{
+          model: meuObj.modelos['Funcoes'],
+          attributes: ['bandeira']
+        }]
       }).then(function (conta) {
+        //console.log(conta.Funco);
         if (conta == null) {
           deliberar(contexto.erro(403, "Dados de acesso informados estão incorretos."));
         } else {

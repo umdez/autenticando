@@ -16,9 +16,9 @@ var Promessa = require('bluebird');
 var registrador = require('../nucleo/registrador')('autenticacao');
 var controladores = require('./controladores/indice');
 
-var Autenticacao = function (fonte, modelo) {
+var Autenticacao = function (fonte, modelos) {
   this.fonte = fonte;
-  this.modelo = modelo;
+  this.modelos = modelos;
 
   EmissorDeEvento.call(this);
 };
@@ -33,17 +33,17 @@ Autenticacao.prototype.iniciar = function () {
   return new Promessa(function (deliberar, recusar) {
     var ControladorDeAutenticacao = new controladores['Autenticacao']({
       'fonte': esteObjeto.fonte
-    , 'modelo': esteObjeto.modelo
+    , 'modelos': esteObjeto.modelos
     });
 
     var ControladorDeSessao = new controladores['Sessao']({
       'fonte': esteObjeto.fonte
-    , 'modelo': esteObjeto.modelo
+    , 'modelos': esteObjeto.modelos
     });
 
     var ControladorDeSaida = new controladores['Saida']({
       'fonte': esteObjeto.fonte
-    , 'modelo': esteObjeto.modelo
+    , 'modelos': esteObjeto.modelos
     });
     
     deliberar(esteObjeto);

@@ -51,7 +51,7 @@ Autenticacao.prototype.iniciar = function() {
 
   this.fonte.criar.enviar.antesQue(function(requisicao, resposta, contexto) {
     
-    //console.log(contexto);
+    //console.log(contexto.instancia);
     //console.log(resposta);
     //console.log(requisicao);
     //contexto.instancia.dataValues['nome'] = "Louro Jose";

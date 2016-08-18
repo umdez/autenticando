@@ -14,7 +14,7 @@ module.exports = function (database, DataTypes) {
   }, {
 
     associar: function (modelos) {
-      modelos.Funcoes.belongsTo(modelos.Usuarios, { foreignKey: 'usuario_id' }); 
+      modelos.Funcoes.belongsTo(modelos.Usuarios, { foreignKey: 'usuario_id' });  
     },
     
     instanceMethods: {

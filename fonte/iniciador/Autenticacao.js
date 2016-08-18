@@ -16,7 +16,7 @@ function CarregaAutenticacao() {};
 
 CarregaAutenticacao.prototype.carregar = function (servicoRest, armazenamento) {
 
-  var autenticacao = new Base.Autenticacao(servicoRest['Contas'], armazenamento['Usuarios']);
+  var autenticacao = new Base.Autenticacao(servicoRest['Contas'], armazenamento);
 
   return autenticacao.iniciar();
 };

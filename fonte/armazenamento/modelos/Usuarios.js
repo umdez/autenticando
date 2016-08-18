@@ -21,7 +21,7 @@ module.exports = function (database, DataTypes) {
   }, {
 
     associar: function (modelos) {
-      
+      modelos.Usuarios.hasOne(modelos.Funcoes, { foreignKey: 'usuario_id' });
     },
     
     instanceMethods: {

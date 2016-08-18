@@ -6,7 +6,7 @@ var Controlador = function(argumentos) {
 
 Controlador.prototype.inicializar = function(opcoes) {
   this.fonte = opcoes.fonte;
-  this.modelo = opcoes.modelo;
+  this.modelos = opcoes.modelos;
   this.jwt = new jwt(opcoes);
   this.limitadorDeUso = require('limitador');
   this.limitar = [];
