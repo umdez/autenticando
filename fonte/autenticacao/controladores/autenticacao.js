@@ -22,24 +22,22 @@ Autenticacao.prototype.iniciar = function() {
      return;
   }
 
-  var esteObj = this;
+  var meuObj = this;
   this.criarUmLimite(this.limiteDeAutenticacoes);
 
   this.fonte.criar.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    //esteObj.zerarUmLimite(esteObj.limiteDeAutenticacoes, requisicao);
-    return esteObj.afunilarServico(esteObj.limiteDeAutenticacoes, requisicao, resposta, contexto);
+    return meuObj.afunilarServico(meuObj.limiteDeAutenticacoes, requisicao, resposta, contexto);
   });
   
   this.fonte.criar.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    //req.session
-    //requisicao.body;
-    //console.log(requisicao.body);
-    return contexto.continuar;
+    return meuObj.jwt.autenticar(requisicao, resposta, contexto, function(seAutenticado) {
+      if (seAutenticado) {
+        meuObj.zerarUmLimite(meuObj.limiteDeAutenticacoes, requisicao);
+      }
+    });
   });
 
   this.fonte.criar.iniciar(function(requisicao, resposta, contexto) {
-    //req.session
-    //requisicao.body
     return contexto.continuar;
   });
 
@@ -52,6 +50,10 @@ Autenticacao.prototype.iniciar = function() {
   });
 
   this.fonte.criar.enviar.antesQue(function(requisicao, resposta, contexto) {
+    
+    //console.log(contexto);
+    //console.log(resposta);
+    //console.log(requisicao);
     //contexto.instancia.dataValues['nome'] = "Louro Jose";
     //delete contexto.instancia.dataValues['senha'];
     //delete contexto.instancia.dataValues['jid'];

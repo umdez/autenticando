@@ -14,34 +14,20 @@ var Contas = {
 ,  metodoDeAtualizacao: 'put'       // Qual será o método para atualização? put, post ou patch?  
 };
 
-Contas.estagiosFinais = [ // Os estágios para o serviço REST.
+Contas.estagiosFinais = [ 
   '/Contas'              
 , '/Contas/:id'          // Um registro em especifico.
 ];  
 
-Contas.busca = {
-  parametro: 'b'     // O parametro a ser utilizado na busca.
-, operador: '$like'  // O operador a ser utilizado na busca.
-, atributos: []      // Os atributos a serem incluidos nas buscas.
-};
-
-Contas.sorteio = {
-  parametro: 's'  // O parametro de sorteio a ser utilizado.
-, padrao: 'id'    // Parametro de sorteio padrão.
-};
-
-Contas.ordenamento = {
-  parametro: 'o'  // O parametro de ordenamento a ser utilizado.
-};
-
-Contas.acoes = [ // As ações permitidas nesta fonte.
+Contas.acoes = [ 
   'deletar'      // DELETE: Realiza a saida do usuário em sua conta.
 , 'criar'        // POST: Realiza a entrada do usuário em sua conta.
 , 'atualizar'    // PUT: Realiza a manutenção da sessão do usuário em sua conta.
 ];                                           
 
 Contas.excluirAtributos = [ // Os atributos que serão excluidos.
-  
+  'createdAt'
+, 'updatedAt'
 ];        
 
 module.exports = Contas;

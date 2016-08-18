@@ -1,3 +1,4 @@
+var jwt = require('../../nucleo/jwt');
 
 var Controlador = function(argumentos) {
   this.inicializar(argumentos);
@@ -5,8 +6,13 @@ var Controlador = function(argumentos) {
 
 Controlador.prototype.inicializar = function(opcoes) {
   this.fonte = opcoes.fonte;
+  this.modelo = opcoes.modelo;
+  this.jwt = new jwt(opcoes);
   this.limitadorDeUso = require('limitador');
   this.limitar = [];
+  this.token = null;
+  this.jid = null;
+  this.senha = null;
 };
 
 Controlador.prototype.criarUmLimite = function(opcoes) {

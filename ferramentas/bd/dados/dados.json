@@ -16,5 +16,22 @@
       "jid": "jena.doe@localhost",
       "senha": "$2a$05$aC3/OQT/UOFgLaBUkygfYOeTgQpN9jGRQsuWeDvTX3WHvSESbfGz."
     }
+  },
+
+  {
+    "model": "Funcoes",
+    "data": {
+      "id": 1,
+      "bandeira": "40",
+      "usuario_id": 1
+    }
+  },
+  {
+    "model": "Funcoes",
+    "data": {
+      "id": 2,
+      "bandeira": "40",
+      "usuario_id": 2
+    }
   }
 ]

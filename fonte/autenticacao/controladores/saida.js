@@ -8,7 +8,7 @@ var Saida = function(argumentos) {
   this.limiteDeSaidas = {
     nome: 'limiteDeSaidas'
   , intervalo: 30*60*1000 // 30 minutos.
-  , max: 10               // Apenas 10 requisições a cada intervalo.
+  , max: 20               // Apenas 10 requisições a cada intervalo.
   };
 
   this.iniciar();

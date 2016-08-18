@@ -44,7 +44,7 @@ exports.prosseguir = function(configuracao, aplicativo, pronto) {
     modulos.servicoRest = objRest;
   })
   .then(function () {
-    return autenticacao.carregar(modulos.servicoRest);
+    return autenticacao.carregar(modulos.servicoRest, modulos.armazenamento);
   })
   .then(function () {
     pronto();

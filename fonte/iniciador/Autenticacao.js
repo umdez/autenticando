@@ -14,9 +14,9 @@ var Base = require('../indice');
 
 function CarregaAutenticacao() {};
 
-CarregaAutenticacao.prototype.carregar = function (servicoRest) {
+CarregaAutenticacao.prototype.carregar = function (servicoRest, armazenamento) {
 
-  var autenticacao = new Base.Autenticacao(servicoRest['Contas']);
+  var autenticacao = new Base.Autenticacao(servicoRest['Contas'], armazenamento['Usuarios']);
 
   return autenticacao.iniciar();
 };

@@ -89,8 +89,8 @@ config.servidor = {
 config.servidor.cors = {                         
   "origem": ["http://localhost", "https://localhost"]
 , "metodos": ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS']  
-, "cabecalhosAceitos": ['Content-Range', 'X-total', 'Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version']
-, "cabecalhosExpostos": ['Content-Range', 'X-total']
+, "cabecalhosAceitos": ['Content-Range', 'X-total', 'Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version', 'X-Limitador-Limite', 'X-Limitador-Restante', 'x-acesso-token', 'x-autenticacao-jid']
+, "cabecalhosExpostos": ['Content-Range', 'X-total', 'X-Limitador-Limite', 'X-Limitador-Restante', 'x-acesso-token', 'x-autenticacao-jid']
 , "seUsarCredenciais": true
 };
 
