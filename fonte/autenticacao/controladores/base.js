@@ -17,14 +17,18 @@ Controlador.prototype.inicializar = function(opcoes) {
 
 Controlador.prototype.criarUmLimite = function(opcoes) {
   this.limitar[opcoes.nome] = new this.limitadorDeUso(opcoes);
+  this.limitar[opcoes.nome].dados = opcoes;
+  this.limitar[opcoes.nome].afunilarSrvico = this.afunilarServico.bind({dados: this.limitar[opcoes.nome]});
+  this.limitar[opcoes.nome].zerarLimite = this.zerarUmLimite.bind({dados: this.limitar[opcoes.nome]});
+  return this.limitar[opcoes.nome];
 };
 
-Controlador.prototype.afunilarServico = function(opcoes, requisicao, resposta, contexto) {
-  return this.limitar[opcoes.nome].Restificando(requisicao, resposta, contexto);
+Controlador.prototype.afunilarServico = function(requisicao, resposta, contexto) {
+  return this.dados.Restificando(requisicao, resposta, contexto);
 };
 
-Controlador.prototype.zerarUmLimite = function(opcoes, requisicao) {
-  this.limitar[opcoes.nome].Restificando.reiniciarChave(requisicao.ip);
+Controlador.prototype.zerarUmLimite = function(requisicao) {
+  return this.dados.Restificando.reiniciarChave(requisicao.ip);
 };
 
 module.exports = Controlador;

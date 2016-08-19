@@ -36,7 +36,7 @@ Autenticacao.prototype.iniciar = function () {
     , 'modelos': esteObjeto.modelos
     });
 
-    var ControladorDeSessao = new controladores['Sessao']({
+    var ControladorDeAutorizacao = new controladores['Autorizacao']({
       'fonte': esteObjeto.fonte
     , 'modelos': esteObjeto.modelos
     });

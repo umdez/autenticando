@@ -1,15 +1,13 @@
 var Base = require('./base');
 var utilitario = require('util');
-var _ = require('lodash');
 
 var Saida = function(argumentos) {
   Saida.super_.call(this, argumentos);
    
-  this.limiteDeSaidas = {
-    nome: 'limiteDeSaidas'
-  , intervalo: 30*60*1000 // 30 minutos.
-  , max: 20               // Apenas 10 requisições a cada intervalo.
-  };
+  this.limiteDeSaidas = this.criarUmLimite({ 
+    nome: 'limiteDeSaidas', intervalo: 15*60*1000, max: 20 
+  , mensagem: 'Limite de requisições de saida ultrapassado. Por favor, tente novamente mais tarde.'
+  });
 
   this.iniciar();
 };
@@ -17,39 +15,47 @@ var Saida = function(argumentos) {
 utilitario.inherits(Saida, Base);
 
 Saida.prototype.iniciar = function() {
-  
-  if (this.fonte == undefined) {
-     return;
-  }
+  var fonte = this.fonte || null;
 
-  var esteObj = this;
-  this.criarUmLimite(this.limiteDeSaidas);
+  if (fonte === null) return;
 
-  this.fonte.deletar.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    return esteObj.afunilarServico(esteObj.limiteDeSaidas, requisicao, resposta, contexto);
+  var meuObj = this;
+
+  fonte.deletar.iniciar.antesQue(function(requisicao, resposta, contexto) {
+    return meuObj.limiteDeSaidas.afunilarSrvico(requisicao, resposta, contexto);
   });
   
-  this.fonte.deletar.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    //req.session
-    //requisicao.body;
-    //console.log(requisicao.body);
+  fonte.deletar.iniciar.antesQue(function(requisicao, resposta, contexto) {
+    return meuObj.jwt.sair(requisicao, resposta, contexto, function(seSaiu) { 
+      if (seSaiu) {};
+    });
+  });
+
+  fonte.deletar.iniciar(function(requisicao, resposta, contexto) {
     return contexto.continuar;
   });
 
-  this.fonte.deletar.iniciar(function(requisicao, resposta, contexto) {
-    return contexto.continuar;
+  fonte.deletar.trazer.antesQue(function(requisicao, resposta, contexto) {
+    // NOTA: Não precisamos puxar os dados da database. Portanto, impedimos isso
+    // de acontecer.
+    return contexto.pular; 
   });
 
-  this.fonte.deletar.escrever.antesQue(function(requisicao, resposta, contexto) {
-    // Impedimos a remoção desta conta
-    return contexto.pular;
+  fonte.deletar.trazer(function(requisicao, resposta, contexto) {
+    return contexto.pular;  // Impedimos a requisição dos dados
   });
 
-  this.fonte.deletar.escrever(function(requisicao, resposta, contexto) {
-    return contexto.pular;
+  fonte.deletar.escrever.antesQue(function(requisicao, resposta, contexto) {
+    // NOTA: Precisamos apenas receber os dados e realizar a saida, portanto,
+    // nós iremos impedir qualquer tentativa de remoção dos dados da database.
+    return contexto.pular; 
   });
 
-  this.fonte.deletar.enviar.antesQue(function(requisicao, resposta, contexto) {
+  fonte.deletar.escrever(function(requisicao, resposta, contexto) {
+    return contexto.pular;  // Impedimos a remoção desta conta
+  });
+
+  fonte.deletar.enviar.antesQue(function(requisicao, resposta, contexto) {
     return contexto.continuar;
   });
 };

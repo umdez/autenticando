@@ -57,42 +57,46 @@ jsonWebToken.prototype.autenticar = function(requisicao, resposta, contexto, cd)
     if (meuObj.jid && meuObj.senha) {
       
      return meuObj.modelos['Usuarios'].findOne({
-        attributes: ['id', 'nome', 'jid'], 
+        attributes: ['id', 'nome', 'jid', 'uuid', 'senha'], 
         where: {
           jid: meuObj.jid
-        }, 
-        include: [{
-          model: meuObj.modelos['Funcoes'],
-          attributes: ['bandeira']
-        }]
+        }//, 
+        //include: [{
+          //model: meuObj.modelos['Funcoes'],
+          //attributes: ['bandeira']
+        //}]
       }).then(function (conta) {
-        //console.log(conta.Funco);
+        
         if (conta == null) {
           deliberar(contexto.erro(403, "Dados de acesso informados estão incorretos."));
         } else {
           var seSenhaConfere = meuObj.senha ? conta.verificarSenha(meuObj.senha) : false;
           if (seSenhaConfere) {
-            var dados = {
-              'id': conta.id,
-              'usuario': {
-                'id': conta.id,
-                'nome': conta.nome,
-                'jid': conta.jid
-              }
+            var usuario = {
+               'id': conta.id
+             , 'jid': conta.jid
+             , 'uuid': conta.uuid
             };
 
-            meuObj.token = jwt.sign(dados, conta.uuid, { expiresInMinutes: (14*60) });
+            meuObj.token = jwt.sign(usuario, "superSegredo", { expiresInMinutes: (14*60) });
 
-            // AFAZER: Descobrir como fazer para informar o token apenas de uma
-            // forma (Ou no session ou na resposta).
-            resposta.token = meuObj.token;  
+            var instancia = {
+              'id': conta.id
+            , 'autenticado': true
+            , 'nome': conta.nome
+            , 'jid': conta.jid
+            , 'uuid': conta.uuid 
+            };
+
             if (requisicao.session) {
               requisicao.session.token = meuObj.token;
-            } 
+            } else {
+              instancia.token = meuObj.token; 
+            }
             
             cd(true);
 
-            resposta.autenticado = true; 
+            contexto.instancia = instancia;
 
             deliberar(contexto.continuar);
           } else {
@@ -109,9 +113,61 @@ jsonWebToken.prototype.autenticar = function(requisicao, resposta, contexto, cd)
   });
 };
 
-jsonWebToken.prototype.autorizar = function(requisicao, resposta, contexto) {
+jsonWebToken.prototype.autorizar = function(requisicao, resposta, contexto, cd) {
   var meuObj = this;
+  this.encontrarUmToken(requisicao);
+
   return new Promessa(function(deliberar, recusar) {
+
+    if (meuObj.token) {
+      
+      jwt.verify(meuObj.token, "superSegredo", function (erro, decodificado) {
+        if (erro) {
+          // erro.name: 'TokenExpiredError' ou outros
+          // erro.message: Mensagem sobre o erro ocorrido.
+          
+          if (requisicao.session) requisicao.session.regenerate(function(erro) {});
+
+          deliberar(contexto.erro(403, "Dados de acesso informados estão incorretos."));
+        } else if (decodificado) {
+          var instancia = { 
+            'id': decodificado.id
+          , 'jid': decodificado.jid
+          , 'uuid': decodificado.uuid
+          , 'autenticado': true
+          };
+          
+          cd(true);
+
+          contexto.instancia = instancia;
+          deliberar(contexto.continuar);
+        } else {
+          
+          if (requisicao.session) requisicao.session.regenerate(function(erro) {});
+
+          deliberar(contexto.erro(403, "Dados de acesso informados estão incorretos."));
+        }
+      });
+    } else {
+      deliberar(contexto.erro(403, "Dados de acesso informados estão incorretos."));
+    }
+  });
+};  
+
+jsonWebToken.prototype.sair = function(requisicao, resposta, contexto, cd) {
+  var meuObj = this;
+  this.encontrarUmToken(requisicao);
+
+  return new Promessa(function(deliberar, recusar) {
+   
+    if (requisicao.session) requisicao.session.regenerate(function(erro) {});  
+
+    var instancia = { };
+          
+    cd(true);
+
+    contexto.instancia = instancia;
+
     deliberar(contexto.continuar);
   });
 };  
