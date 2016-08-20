@@ -9,6 +9,7 @@ var utilitario = require('util');
 var EmissorDeEvento = require('events').EventEmitter;
 var Promessa = require('bluebird');
 var fontes = require('./fontes/indice');
+var controladores = require('./controladores/indice');
 var registrador = require('../nucleo/registrador')('restificando');
 var restificando = require('restificando');
 var _ = require('lodash');
@@ -32,6 +33,8 @@ var Restificando = function (opcoes) {
   this.modulos = opcoes.modulos;
 
   this.fontes = [];
+
+  this.controladores = [];
 };
 
 Restificando.prototype.carregarAsFontes = function () {
@@ -92,28 +95,20 @@ Restificando.prototype.carregarAsFontes = function () {
 Restificando.prototype.carregarOsControladores = function () {
   
   var meuObj = this;
-  
-  this.minhasFontes.forEach(function (fonte) {
-    
-    // Verificamos inicialmente se existe esse modelo.
-    if (meuObj.armazenamento.hasOwnProperty(fonte.nome)) {
-      
-      // Acrescentamos aqui à nossa fonte os seus controladores.
-      //if (fonte.controladores){
-      //  var osControladoresUsados = fonte.controladores();
-      //  meuObj[nomeUtilizado].usar(osControladoresUsados);
-      // }
-      
-      // Acrescentamos aqui os controladores funcionais a esta fonte.
-      if (fonte.controladoresFuncionais) {
-        fonte.controladoresFuncionais(meuObj[nomeUtilizado]);
-      }
+  var moduloRest = this.modulos['rest'];
+  var moduloDb = this.modulos['bd'];
 
-    } else {
-      
-    }
+  controladores.forEach(function (c) {
+    var fonte = moduloRest.fontes[c.aliase].fonte;
+
+    meuObj.controladores[c.aliase] = new c.Controlador({ 
+     'fonte': fonte
+    , modelos: moduloDb.modelos 
+    });
   });
-   
+
+  return meuObj.controladores;
+
 };
 
 Restificando.prototype.iniciar = function () {

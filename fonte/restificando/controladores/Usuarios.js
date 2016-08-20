@@ -1,31 +1,38 @@
-var limitadorDeUso = require('limitador');
+var Base = require('./base');
+var utilitario = require('util');
 
-/* @Função controladoresFuncionais(). Os controladores funcionais desta fonte. 
- *  
- * @Veja https://github.com/umdez/restificando/blob/master/docs/aUtilizacao.md 
- */
-Usuarios.controladoresFuncionais = function(fonte) {
+var Usuarios = function(argumentos) {
+  Usuarios.super_.call(this, argumentos);
+
+  this.limiteDeLeituras = this.criarUmLimite({ 
+    nome: 'limiteDeRequisicoes', intervalo: 60*60*1000, max: 2 
+  , mensagem: 'Muitas tentativas de leituras aos usuários. Por favor, tente novamente mais tarde.'
+  });
+
+  this.limiteDeListagens = this.criarUmLimite({ 
+    nome: 'limiteDeListagens', intervalo: 60*60*1000, max: 150
+  , mensagem: 'Muitas tentativas de listagens aos usuários. Por favor, tente novamente mais tarde.'
+  });
+
+  this.iniciar();
+};
+
+utilitario.inherits(Usuarios, Base);
+
+
+Usuarios.prototype.iniciar = function() {
   
-  if (fonte == undefined) {
-    return;
-  }
+  var fonte = this.fonte || null;
 
-  var limiteDeLeituras = new limitadorDeUso({
-    intervalo: 60*60*1000, // 60 minutos.
-    max: 150 // Apenas 150 requisições a cada intervalo.
-  });
+  if (fonte === null) return;
 
-  var limiteDeListagens = new limitadorDeUso({
-    intervalo: 60*60*1000, // 60 minutos.
-    max: 150 // Apenas 150 requisições a cada intervalo.
-  });
+  var meuObj = this;
 
   fonte.ler.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    return limiteDeLeituras.Restificando(requisicao, resposta, contexto);
+    return meuObj.limiteDeLeituras.afunilarSrvico(requisicao, resposta, contexto);
   });
   
   fonte.ler.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    // Aqui nós autenticamos.
     return contexto.continuar;
   });
 
@@ -33,20 +40,6 @@ Usuarios.controladoresFuncionais = function(fonte) {
     return contexto.continuar;
   });
 
-  fonte.listar.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    return limiteDeListagens.Restificando(requisicao, resposta, contexto);
-  });
-
-  fonte.listar.iniciar(function(requisicao, resposta, contexto) {
-    return contexto.continuar;
-  });
-
-  fonte.deletar.iniciar.antesQue(function(requisicao, resposta, contexto) {
-    return contexto.erro(403, "Não é possível deletar este usuário.");
-  });
-
-  fonte.deletar.iniciar(function(requisicao, resposta, contexto) {
-    return contexto.pular;
-  });
-  
 };
+
+module.exports = Usuarios;
