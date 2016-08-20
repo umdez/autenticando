@@ -5,7 +5,7 @@ var Usuarios = function(argumentos) {
   Usuarios.super_.call(this, argumentos);
 
   this.limiteDeLeituras = this.criarUmLimite({ 
-    nome: 'limiteDeRequisicoes', intervalo: 60*60*1000, max: 2 
+    nome: 'limiteDeRequisicoes', intervalo: 60*60*1000, max: 150 
   , mensagem: 'Muitas tentativas de leituras aos usuários. Por favor, tente novamente mais tarde.'
   });
 

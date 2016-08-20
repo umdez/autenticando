@@ -20,17 +20,23 @@ module.exports = function (database, DataTypes) {
     senha: { type: DataTypes.STRING, validate: {} }  // A senha do usuário. 
   }, {
 
-    associar: function (modelos) {
-      modelos.Usuarios.hasOne(modelos.Funcoes, { foreignKey: 'usuario_id' });
+    associate: function (modelos) {
+      modelos.Usuarios.hasOne(modelos.Funcoes, { as: 'Usuario' }); 
     },
-    
+    classMethods:{
+      
+    },
     instanceMethods: {
       verificarSenha: function(senha) {
         // Verificamos a senha de forma sincrona. Retorna true se cofere com a
         // nossa senha.
         return bcrypt.compareSync(senha, this.senha);
       }
-    }
+    },
+    underscored: true,
+    timestamps: true,
+    freezeTableName: true,
+    tableName: 'Usuarios'
   });
 
   return {

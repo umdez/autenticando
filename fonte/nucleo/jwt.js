@@ -60,11 +60,12 @@ jsonWebToken.prototype.autenticar = function(requisicao, resposta, contexto, cd)
         attributes: ['id', 'nome', 'jid', 'uuid', 'senha'], 
         where: {
           jid: meuObj.jid
-        }//, 
-        //include: [{
-          //model: meuObj.modelos['Funcoes'],
-          //attributes: ['bandeira']
-        //}]
+        }, 
+        include: [{
+          model: meuObj.modelos['Funcoes'],
+          as: 'Funcoes',
+          attributes: ['bandeira']
+        }]
       }).then(function (conta) {
         
         if (conta == null) {
@@ -72,12 +73,20 @@ jsonWebToken.prototype.autenticar = function(requisicao, resposta, contexto, cd)
         } else {
           var seSenhaConfere = meuObj.senha ? conta.verificarSenha(meuObj.senha) : false;
           if (seSenhaConfere) {
+            
+            var bandeiras = null;
+            
+            if (conta.Funcoes && conta.Funcoes.dataValues) {
+              bandeiras = conta.Funcoes.dataValues['bandeira'];
+            }
+
             var usuario = {
                'id': conta.id
              , 'jid': conta.jid
              , 'uuid': conta.uuid
+             , 'bandeiras': bandeiras
             };
-
+            
             meuObj.token = jwt.sign(usuario, "superSegredo", { expiresInMinutes: (14*60) });
 
             var instancia = {
@@ -86,6 +95,7 @@ jsonWebToken.prototype.autenticar = function(requisicao, resposta, contexto, cd)
             , 'nome': conta.nome
             , 'jid': conta.jid
             , 'uuid': conta.uuid 
+            , 'bandeiras': bandeiras
             };
 
             if (requisicao.session) {
