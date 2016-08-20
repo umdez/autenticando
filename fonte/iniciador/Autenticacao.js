@@ -1,22 +1,21 @@
 'use strict';
 
-/*******************************************************************
- * Autenticando é de (C) propriedade da Devowly Sistemas 2015-2016 *
- *                 https://github.com/devowly                      *
- *******************************************************************
- * 
- * $Id Autenticacao.js, criado em 17/08/2016 às 19:42 por Leo Felippe $
- *
- * Versão atual 0.0.1-Beta
- */
-
 var Base = require('../indice');
 
-function CarregaAutenticacao() {};
+function CarregaAutenticacao(configuracao, aplicativo) {
 
-CarregaAutenticacao.prototype.carregar = function (servicoRest, armazenamento) {
+  this.opcoes = {
+    configuracao: configuracao || {}
+  , aplicativo: aplicativo
+  };
 
-  var autenticacao = new Base.Autenticacao(servicoRest['Contas'], armazenamento);
+};
+
+CarregaAutenticacao.prototype.carregar = function (modulos) {
+
+  this.opcoes.modulos = modulos;
+  
+  var autenticacao = new Base.Autenticacao(this.opcoes);
 
   return autenticacao.iniciar();
 };
