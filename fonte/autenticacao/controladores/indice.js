@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = {
-  Autenticacao: require('./autenticacao'),
-  Saida: require('./saida'),
-  Autorizacao: require('./autorizacao')
-};
+module.exports = [
+  { nome: 'Autenticacao', Controlador: require('./autenticacao')}
+, { nome: 'Saida', Controlador: require('./saida')}
+, { nome: 'Autorizacao', Controlador: require('./autorizacao')}
+];

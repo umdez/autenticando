@@ -18,7 +18,7 @@ Autenticacao.prototype.iniciar = function() {
   var fonte = this.fonte || null;
 
   if (fonte === null) return;
-
+  
   var meuObj = this;
 
   fonte.criar.iniciar.antesQue(function(requisicao, resposta, contexto) {
