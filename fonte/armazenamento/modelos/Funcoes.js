@@ -13,13 +13,19 @@ module.exports = function (database, DataTypes) {
     bandeira: { type: DataTypes.STRING, validate: {} }  
   }, {
 
-    associar: function (modelos) {
-      modelos.Funcoes.belongsTo(modelos.Usuarios, { foreignKey: 'usuario_id' }); 
+    associate: function (modelos) {
+      modelos.Funcoes.belongsTo(modelos.Usuarios, { foreignKey: 'usuario_id', as: 'Funcoes' });  
     },
-    
+    classMethods:{
+      
+    },
     instanceMethods: {
       
-    }
+    },
+    underscored: true,
+    timestamps: true,
+    freezeTableName: true,
+    tableName: 'Funcoes'
   });
 
   return {
