@@ -111,11 +111,11 @@ config.servidor.certificados = {
 , "certificado": "servidorHttps.crt"   
 };
 
-/* @Diretiva {servidorRest} O nosso servidor Restificando.
+/* @Diretiva {restificando} O nosso servidor Restificando.
  *
- * - servidorRest.base (Opcional) A nossa base do serviço restificando.
+ * - restificando.base (Opcional) A nossa base do serviço restificando.
  */
-config.servidorRest = {
+config.restificando = {
   "base": ""
 };
 
